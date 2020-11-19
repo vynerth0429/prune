@@ -51,6 +51,9 @@ $ docker run --name gala-pg -p 5432:5432 -e POSTGRES_PASSWORD=thisisnotthepasswo
 # Connect to docker via exec
 $ docker exec -it [container_name] bash
 
+EXAMPLE:
+$ docker exec -it gala-pg bash
+
 # You should now be inside the container as `root`
 # To access postgres, change from root to user `postgres` and run psql.
 

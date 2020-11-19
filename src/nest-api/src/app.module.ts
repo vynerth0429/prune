@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+import { UserModule } from './user/user.model';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,7 +21,8 @@ import { AppService } from './app.service';
       database: process.env.TYPEORM_DATABASE,
       autoLoadEntities: JSON.parse(process.env.TYPEORM_AUTOLOAD_ENTITES),
       synchronize: JSON.parse(process.env.TYPEORM_SYNCHRONIZE),
-    })
+    }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -32,6 +32,38 @@
 $ npm install
 ```
 
+## Run docker for Postgres
+```bash
+# pull postgres image from dockerhub
+$ docker pull postgres
+
+# Run docker image
+check .env file for the following:
+> container_name
+> database_password
+
+TEMPLATE:
+$ docker run --name [container_name] -p 5432:5432 -e POSTGRES_PASSWORD=[database_password] -d postgres
+
+EXAMPLE:
+$ docker run --name gala-pg -p 5432:5432 -e POSTGRES_PASSWORD=thisisnotthepassword -d postgres
+
+# Connect to docker via exec
+$ docker exec -it [container_name] bash
+
+# You should now be inside the container as `root`
+# To access postgres, change from root to user `postgres` and run psql.
+
+$ su postgres # change user
+$ psql # enter psql
+$ \conninfo # checking connection information (database, socket, port)
+# Sample -> You are connected to database "postgres" as user "postgres" via socket in "/var/run/postgresql" at port "5432"
+$ \q # exit psql
+$ exit # exit container
+
+```
+
+
 ## Running the app
 
 ```bash
@@ -58,16 +90,3 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

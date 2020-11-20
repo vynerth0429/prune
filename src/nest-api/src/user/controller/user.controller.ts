@@ -1,4 +1,6 @@
 import { Controller, Body, Get, Post, Param, Delete, Patch } from "@nestjs/common";
+import { of } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 
 import { TUserRequest } from './../models/user.interface';
 import { UserService } from './../service/user.service';
@@ -13,8 +15,10 @@ export class UserController {
   create(
     @Body() user: TUserRequest
   ) {
-    console.log(user);
-    return this.userService.create(user);
+    return this.userService.create(user)
+      .pipe(
+        catchError((error) => of(error.message))
+      );
   }
 
   @Get()
@@ -41,8 +45,23 @@ export class UserController {
   @Patch(':userId')
   update(
     @Param('userId') userId: string,
-    @Body() user: Partial<TUserRequest>
+    @Body() user: TUserRequest
   ) {
     return this.userService.update(userId, user);
+  }
+
+  @Post('login')
+  login(
+    @Body() user: TUserRequest
+  ) {
+    return this.userService.login(user)
+      .pipe(
+        map((jwt: string) => {
+          return {
+            accessToken: jwt
+          }
+        }),
+        catchError((error) => of(error.message))
+      );
   }
 }

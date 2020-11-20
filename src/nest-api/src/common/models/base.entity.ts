@@ -5,10 +5,10 @@ import {
 
 export abstract class BaseEntity {
   @CreateDateColumn()
-  createdOn?: Date;
+  createdOn: Date;
 
   @Column({
     nullable: true,
   })
-  modifiedOn?: Date;
+  modifiedOn: Date;
 }

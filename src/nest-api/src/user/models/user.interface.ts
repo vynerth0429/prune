@@ -1,11 +1,4 @@
-export type TUserRequest = {
-  email: string,
-  firstName: string,
-  lastName:	string,
-  password: string,
-}
-
-export type TUserResponse = {
+export interface IUser {
   userId: string,
   email: string,
   firstName: string,
@@ -13,4 +6,12 @@ export type TUserResponse = {
   isVerified:	boolean,
   createdOn: Date,
   modifiedOn: Date,
+  password: string,
+}
+
+export type TUserRequest = {
+  email: string,
+  firstName: string,
+  lastName:	string,
+  password: string,
 }

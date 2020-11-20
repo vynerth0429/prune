@@ -1,0 +1,110 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Galatsgo",
+		"_postman_id": "063ad802-c3c7-5879-beac-847968d1442d",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"description": "",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"url": "localhost:3000/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"gala3@mailinator.com\",\n\t\"firstName\": \"Galatsgo\",\n\t\"lastName\": \"3\",\n\t\"password\": \"password\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"url": "localhost:3000/users",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Info",
+					"request": {
+						"url": "localhost:3000/users/3cba3358-3b6d-4acf-939b-ab307cb9ca70",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove User",
+					"request": {
+						"url": "localhost:3000/users/8be6a11f-aeef-49f4-aeaf-2c90820ee034",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"url": "localhost:3000/users/3cba3358-3b6d-4acf-939b-ab307cb9ca70",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"isVerified\": false\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"url": "localhost:3000/users/login",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"gala6@mailinator.com\",\n\t\"password\": \"password\"\n}\n"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

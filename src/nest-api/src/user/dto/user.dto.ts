@@ -89,7 +89,7 @@ export class LoginUserResponseDTO {
   }
 
   @ApiProperty({
-    example: "xxxxxx.yyyyyy.zzzzz",
+    example: "xxxxx.yyyyy.zzzzz",
     description: "Access token"
   })
   accessToken: string;

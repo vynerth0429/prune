@@ -19,9 +19,15 @@ import {
 } from '@nestjs/swagger';
 
 import {
-  TErrorResponse,
-  TErrorContent,
-} from './../../common/models/error-codes.types';
+  CustomApiException,
+} from './../../common/exceptions/custom-api-exception';
+import {
+  UserNotFoundException,
+  InvalidCredentialException,
+  EmailAlreadyExistsException,
+  ValidationFailedException,
+} from "src/common/exceptions/exception-thrower";
+
 import {
   UpdateResultDTO,
   DeleteResultDTO,
@@ -62,9 +68,19 @@ export class UserController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Create user success',
+    description: 'Success: Create user',
     type: UserEntity,
   })
+  @CustomApiException(
+    () => EmailAlreadyExistsException, {
+      description: 'Error: Email Already Exists'
+    }
+  )
+  @CustomApiException(
+    () => ValidationFailedException, {
+      description: 'Error: Bad Request'
+    }
+  )
   create(
     @Body() user: CreateUserDTO
   ) {
@@ -81,7 +97,7 @@ export class UserController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Get user list success',
+    description: 'Success: Get User List',
     type: UserEntity,
     isArray: true,
   })
@@ -101,9 +117,19 @@ export class UserController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Get user detail success',
+    description: 'Success: Get User Detail',
     type: UserEntity
   })
+  @CustomApiException(
+    () => UserNotFoundException, {
+      description: 'Error: Not Found'
+    }
+  )
+  @CustomApiException(
+    () => ValidationFailedException, {
+      description: 'Error: Bad Request'
+    }
+  )
   find(
     @Param('userId', ParseUUIDPipe)
     userId: string
@@ -124,9 +150,19 @@ export class UserController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Update user detail success',
+    description: 'Success: Update User Detail',
     type: UpdateResultDTO,
   })
+  @CustomApiException(
+    () => UserNotFoundException, {
+      description: 'Error: Not Found'
+    }
+  )
+  @CustomApiException(
+    () => ValidationFailedException, {
+      description: 'Error: Bad Request'
+    }
+  )
   @UsePipes(new ValidationPipe({
     skipMissingProperties: true,
   }))
@@ -149,9 +185,19 @@ export class UserController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Login user success',
+    description: 'Success: Login User',
     type: LoginUserResponseDTO,
   })
+  @CustomApiException(
+    () => InvalidCredentialException, {
+      description: 'Error: Invalid Credentials'
+    }
+  )
+  @CustomApiException(
+    () => ValidationFailedException, {
+      description: 'Error: Bad Request'
+    }
+  )
   login(
     @Body() user: LoginUserDTO
   ) {
@@ -170,9 +216,19 @@ export class UserController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Delete user success',
+    description: 'Success: Delete User',
     type: DeleteResultDTO,
   })
+  @CustomApiException(
+    () => UserNotFoundException, {
+      description: 'Error: Not Found'
+    }
+  )
+  @CustomApiException(
+    () => ValidationFailedException, {
+      description: 'Error: Bad Request'
+    }
+  )
   delete(
     @Param('userId', ParseUUIDPipe)
     userId: string

@@ -1,25 +1,43 @@
 import {
-  ConflictException,
   NotFoundException,
   UnauthorizedException,
+  ConflictException,
+  BadRequestException,
 } from "@nestjs/common";
 
-import { ExceptionParser } from './exception-parser';
+import {
+  TErrorContent,
+  ErrorCodesEnum,
+  TErrorCodesEnum,
+} from './../models/error-codes.types';
 
-const throwUserNotFound = () => {
-  throw new ExceptionParser(NotFoundException, "U_0001");
+const generateErrorContent = (code: TErrorCodesEnum): TErrorContent => {
+  return {
+    errorCode: code,
+    errorDescription: ErrorCodesEnum[code]
+  }
 }
 
-const throwInvalidCredential = () => {
-  throw new ExceptionParser(UnauthorizedException, "U_0002");
+export class UserNotFoundException extends NotFoundException {
+  constructor() {
+    super(generateErrorContent('U_0001'));
+  }
 }
 
-const throwEmailAlreadyExists = () => {
-  throw new ExceptionParser(ConflictException, "A_0001");
+export class InvalidCredentialException extends UnauthorizedException {
+  constructor() {
+    super(generateErrorContent('U_0002'));
+  }
 }
 
-export {
-  throwUserNotFound,
-  throwInvalidCredential,
-  throwEmailAlreadyExists
+export class EmailAlreadyExistsException extends ConflictException {
+  constructor() {
+    super(generateErrorContent('A_0001'));
+  }
+}
+
+export class ValidationFailedException extends BadRequestException {
+  constructor() {
+    super("string | string[]");
+  }
 }

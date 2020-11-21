@@ -13,7 +13,7 @@ export type TErrorContent = {
 
 export type TErrorResponse<T> = {
   statusCode: number,
-  error: T,
+  message: T,
   timestamp: string,
   path: string,
 }

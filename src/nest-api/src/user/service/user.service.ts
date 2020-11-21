@@ -7,9 +7,9 @@ import { from, Observable, of, throwError } from "rxjs";
 import { map, catchError, switchMap } from 'rxjs/operators';
 
 import {
-  throwUserNotFound,
-  throwInvalidCredential,
-  throwEmailAlreadyExists,
+  UserNotFoundException,
+  InvalidCredentialException,
+  EmailAlreadyExistsException,
 } from "./../../common/exceptions/exception-thrower";
 
 import {
@@ -39,7 +39,7 @@ export class UserService {
     ).pipe(
       map((user: UserEntity) => {
         if (user) {
-          throwEmailAlreadyExists();
+          throw new EmailAlreadyExistsException();
         }
         return null;
       }),
@@ -77,7 +77,8 @@ export class UserService {
     ).pipe(
       map((user: UserEntity) => {
         if (!user) {
-          throwUserNotFound();
+          // throwUserNotFound();
+          throw new UserNotFoundException();
         }
         return user;
       })
@@ -146,7 +147,7 @@ export class UserService {
       .pipe(
         map((user: UserEntity) => {
           if (!user) {
-            throwInvalidCredential();
+            throw new InvalidCredentialException();
           }
           return user;
         }),
@@ -159,7 +160,7 @@ export class UserService {
             .pipe(
               map((match: boolean) => {
                 if (!match) {
-                  throwInvalidCredential();
+                  throw new InvalidCredentialException();
                 }
                 return user;
               })

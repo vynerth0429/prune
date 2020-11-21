@@ -1,8 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import {
+  Injectable,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from 'typeorm';
 import { from, Observable, throwError } from "rxjs";
 import { map, catchError, switchMap } from 'rxjs/operators';
+
+import {
+  throwUserNotFound,
+  throwInvalidCredential,
+} from "./../../common/exceptions/exception-thrower";
 
 import {
   UserEntity
@@ -49,21 +56,38 @@ export class UserService {
   }
 
   findById(userId: string) {
-    return from(this.userRepo.findOne({
-      userId: userId,
-    }))
+    return from(
+      this.userRepo.findOne({
+        userId: userId,
+      })
+    ).pipe(
+      map((user: UserEntity) => {
+        if (!user) {
+          throwUserNotFound();
+        }
+        return user;
+      })
+    );
   }
 
   findByEmail(email: string) {
-    return from(this.userRepo.findOne({
-      email: email,
-    }));
+    return from(
+      this.userRepo.findOne({
+        email: email,
+      })
+    )
   }
 
   delete(userId: string) {
-    return from(this.userRepo.delete({
-      userId: userId,
-    }));
+    return from(
+      this.findById(userId)
+    ).pipe(
+      switchMap((oldUser: UserEntity) => {
+        return this.userRepo.delete({
+          userId: oldUser.userId,
+        })
+      })
+    )
   }
 
   update(
@@ -71,16 +95,21 @@ export class UserService {
     user: UpdateUserDTO,
   ) {
     return from(
-      this.userRepo.update(
-        {
-          userId: userId
-        },
-        {
-          ...user,
-          modifiedOn: new Date(),
-        },
-      )
-    );
+      this.findById(userId)
+    ).pipe(
+      switchMap((oldUser: UserEntity) => {
+        return this.userRepo.update(
+          {
+            userId: userId
+          },
+          {
+            ...oldUser,
+            ...user,
+            modifiedOn: new Date(),
+          },
+        )
+      })
+    )
   }
 
   login(user: LoginUserDTO) {
@@ -100,6 +129,12 @@ export class UserService {
   ) {
     return this.findByEmail(email)
       .pipe(
+        map((user: UserEntity) => {
+          if (!user) {
+            throwInvalidCredential();
+          }
+          return user;
+        }),
         switchMap((user: UserEntity) => {
           return this.authService
             .comparePasswords(
@@ -108,11 +143,10 @@ export class UserService {
             )
             .pipe(
               map((match: boolean) => {
-                if (match) {
-                  return user;
-                } else {
-                  throw new Error('Invalid credentitals');
+                if (!match) {
+                  throwInvalidCredential();
                 }
+                return user;
               })
             );
         })

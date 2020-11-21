@@ -78,7 +78,6 @@ export class UserController {
             accessToken: jwt
           }
         }),
-        catchError((error) => of(error.message))
       );
   }
 }

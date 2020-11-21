@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Observable, from } from 'rxjs';
 import * as bcrypt from 'bcrypt';
 
-import { IUser } from './../../user/models/user.interface';
+import { UserEntity } from '../../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) { }
 
-  generateJWT(user: IUser): Observable<string> {
+  generateJWT(user: UserEntity): Observable<string> {
     return from(this.jwtService.signAsync({ user }))
   }
 

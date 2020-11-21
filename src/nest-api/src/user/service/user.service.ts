@@ -3,22 +3,24 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from 'typeorm';
-import { from, Observable, throwError } from "rxjs";
+import { from, Observable, of, throwError } from "rxjs";
 import { map, catchError, switchMap } from 'rxjs/operators';
 
 import {
   throwUserNotFound,
   throwInvalidCredential,
+  throwEmailAlreadyExists,
 } from "./../../common/exceptions/exception-thrower";
 
 import {
   UserEntity
-} from './../models/user.entity';
+} from '../entities/user.entity';
 import {
   CreateUserDTO,
   UpdateUserDTO,
   LoginUserDTO,
-} from './../models/user.interface';
+  LoginUserResponseDTO,
+} from './../dto/user.dto';
 
 import {
   AuthService,
@@ -32,23 +34,35 @@ export class UserService {
   ) { }
 
   create(user: CreateUserDTO): Observable<UserEntity> {
-    return this.authService
-      .hashPassword(user.password)
-      .pipe(
-        switchMap((hashPassword: string) => {
-          const newUser = new UserEntity();
-          newUser.email = user.email;
-          newUser.firstName = user.firstName;
-          newUser.lastName = user.lastName;
-          newUser.password = hashPassword;
+    return from(
+      this.findByEmail(user.email)
+    ).pipe(
+      map((user: UserEntity) => {
+        if (user) {
+          throwEmailAlreadyExists();
+        }
+        return null;
+      }),
+      switchMap(_ => {
+        return this.authService
+          .hashPassword(user.password)
+          .pipe(
+            switchMap((hashPassword: string) => {
+              const newUser = new UserEntity();
+              newUser.email = user.email;
+              newUser.firstName = user.firstName;
+              newUser.lastName = user.lastName;
+              newUser.password = hashPassword;
 
-          return from(
-            this.userRepo.save(newUser)
-          ).pipe(
-            catchError((error) => throwError(error))
-          );
-        })
-      )
+              return from(
+                this.userRepo.save(newUser)
+              ).pipe(
+                catchError((error) => throwError(error))
+              );
+            })
+          )
+      })
+    )
   }
 
   findAll() {
@@ -112,13 +126,14 @@ export class UserService {
     )
   }
 
-  login(user: LoginUserDTO) {
+  login(user: LoginUserDTO): Observable<LoginUserResponseDTO> {
     return this.validateUser(user.email, user.password)
       .pipe(
         switchMap((user: UserEntity) => {
-          if (user) {
-            return this.authService.generateJWT(user);
-          }
+          return this.authService.generateJWT(user);
+        }),
+        map((jwt: string) => {
+          return new LoginUserResponseDTO(jwt);
         })
       );
   }

@@ -8,7 +8,9 @@ import {
   UserEntity
 } from './../models/user.entity';
 import {
-  TUserRequest,
+  CreateUserDTO,
+  UpdateUserDTO,
+  LoginUserDTO,
 } from './../models/user.interface';
 
 import {
@@ -22,7 +24,7 @@ export class UserService {
     private authService: AuthService,
   ) { }
 
-  create(user: TUserRequest): Observable<UserEntity> {
+  create(user: CreateUserDTO): Observable<UserEntity> {
     return this.authService
       .hashPassword(user.password)
       .pipe(
@@ -66,11 +68,8 @@ export class UserService {
 
   update(
     userId: string,
-    user: TUserRequest,
+    user: UpdateUserDTO,
   ) {
-    delete user.email;
-    delete user.password;
-
     return from(
       this.userRepo.update(
         {
@@ -84,7 +83,7 @@ export class UserService {
     );
   }
 
-  login(user: TUserRequest) {
+  login(user: LoginUserDTO) {
     return this.validateUser(user.email, user.password)
       .pipe(
         switchMap((user: UserEntity) => {

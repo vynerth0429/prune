@@ -1,110 +1,149 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "7397a115-15ff-4530-a2b9-bb99e84a7b4b",
 		"name": "Galatsgo",
-		"_postman_id": "063ad802-c3c7-5879-beac-847968d1442d",
-		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Users",
-			"description": "",
 			"item": [
 				{
 					"name": "Create User",
 					"request": {
-						"url": "localhost:3000/users",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"gala3@mailinator.com\",\n\t\"firstName\": \"Galatsgo\",\n\t\"lastName\": \"3\",\n\t\"password\": \"password\"\n}"
+							"raw": "{\n\t\"email\": \"gala17@mailinator.com\",\n\t\"firstName\": \"Galatsgo\",\n\t\"lastName\": \"17\",\n\t\"password\": \"password\",\n    \"age\": 2\n    \n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{host}}/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Get All Users",
 					"request": {
-						"url": "localhost:3000/users",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"url": {
+							"raw": "{{host}}/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Get User Info",
 					"request": {
-						"url": "localhost:3000/users/3cba3358-3b6d-4acf-939b-ab307cb9ca70",
 						"method": "GET",
 						"header": [],
-						"body": {},
-						"description": ""
+						"url": {
+							"raw": "{{host}}/users/3cba3358-3b6d-4acf-939b-ab307cb9ca70",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"3cba3358-3b6d-4acf-939b-ab307cb9ca70"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Remove User",
 					"request": {
-						"url": "localhost:3000/users/8be6a11f-aeef-49f4-aeaf-2c90820ee034",
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"description": ""
+						"url": {
+							"raw": "{{host}}/users/8be6a11f-aeef-49f4-aeaf-2c90820ee034",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"8be6a11f-aeef-49f4-aeaf-2c90820ee034"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Update User",
 					"request": {
-						"url": "localhost:3000/users/3cba3358-3b6d-4acf-939b-ab307cb9ca70",
 						"method": "PATCH",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"isVerified\": false\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{host}}/users/3cba3358-3b6d-4acf-939b-ab307cb9ca70",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"3cba3358-3b6d-4acf-939b-ab307cb9ca70"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Login User",
 					"request": {
-						"url": "localhost:3000/users/login",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"email\": \"gala6@mailinator.com\",\n\t\"password\": \"password\"\n}\n"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{host}}/users/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

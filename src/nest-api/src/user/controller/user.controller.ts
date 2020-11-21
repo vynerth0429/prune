@@ -1,9 +1,25 @@
-import { Controller, Body, Get, Post, Param, Delete, Patch } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Patch,
+  Delete,
+  ParseUUIDPipe,
+} from "@nestjs/common";
 import { of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 
-import { TUserRequest } from './../models/user.interface';
-import { UserService } from './../service/user.service';
+import {
+  CreateUserDTO,
+  UpdateUserDTO,
+  LoginUserDTO,
+} from './../models/user.interface';
+
+import {
+  UserService,
+} from './../service/user.service';
 
 @Controller('users')
 export class UserController {
@@ -13,7 +29,7 @@ export class UserController {
 
   @Post()
   create(
-    @Body() user: TUserRequest
+    @Body() user: CreateUserDTO
   ) {
     return this.userService.create(user)
       .pipe(
@@ -28,7 +44,7 @@ export class UserController {
 
   @Get(':userId')
   find(
-    @Param('userId')
+    @Param('userId', ParseUUIDPipe)
     userId: string
   ) {
     return this.userService.findById(userId);
@@ -36,7 +52,7 @@ export class UserController {
 
   @Delete(':userId')
   delete(
-    @Param('userId')
+    @Param('userId', ParseUUIDPipe)
     userId: string
   ) {
     return this.userService.delete(userId);
@@ -44,15 +60,16 @@ export class UserController {
 
   @Patch(':userId')
   update(
-    @Param('userId') userId: string,
-    @Body() user: TUserRequest
+    @Param('userId', ParseUUIDPipe)
+    userId: string,
+    @Body() user: UpdateUserDTO
   ) {
     return this.userService.update(userId, user);
   }
 
   @Post('login')
   login(
-    @Body() user: TUserRequest
+    @Body() user: LoginUserDTO
   ) {
     return this.userService.login(user)
       .pipe(

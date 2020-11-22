@@ -1,6 +1,7 @@
 export enum ErrorCodesEnum {
-  A_0001 = 'Email already exists',
-  A_0002 = 'Token not found or invalid',
+  A_0001 = 'Token not found or invalid',
+  A_0002 = 'Email already exists',
+  A_0003 = 'Insufficient permission',
   U_0001 = 'User not found',
   U_0002 = 'Invalid credentials',
 };

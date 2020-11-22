@@ -1,5 +1,7 @@
 import {
+  Inject,
   Injectable,
+  forwardRef,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from 'typeorm';
@@ -30,6 +32,7 @@ import {
 export class UserService {
   constructor(
     @InjectRepository(UserEntity) private readonly userRepo: Repository<UserEntity>,
+    @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
   ) { }
 
@@ -69,18 +72,20 @@ export class UserService {
     return from(this.userRepo.find());
   }
 
-  findById(userId: string) {
+  findOne(userId: string) {
     return from(
       this.userRepo.findOne({
         userId: userId,
       })
     ).pipe(
-      map((user: UserEntity) => {
-        if (!user) {
-          // throwUserNotFound();
-          throw new UserNotFoundException();
-        }
-        return user;
+      this.validateUserExistence()
+    )
+  }
+
+  findById(userId: string) {
+    return from(
+      this.userRepo.findOne({
+        userId: userId,
       })
     );
   }
@@ -97,6 +102,7 @@ export class UserService {
     return from(
       this.findById(userId)
     ).pipe(
+      this.validateUserExistence(),
       switchMap((oldUser: UserEntity) => {
         return this.userRepo.delete({
           userId: oldUser.userId,
@@ -112,17 +118,11 @@ export class UserService {
     return from(
       this.findById(userId)
     ).pipe(
-      switchMap((oldUser: UserEntity) => {
-        return this.userRepo.update(
-          {
-            userId: userId
-          },
-          {
-            ...oldUser,
-            ...user,
-            modifiedOn: new Date(),
-          },
-        )
+      this.validateUserExistence(),
+      switchMap((userEntity: UserEntity) => {
+        userEntity.firstName = user.firstName || userEntity.firstName;
+        userEntity.lastName = user.lastName || userEntity.lastName;
+        return this.userRepo.update({ userId: userId}, userEntity);
       })
     )
   }
@@ -167,5 +167,14 @@ export class UserService {
             );
         })
       )
+  }
+
+  validateUserExistence() {
+    return map((user: UserEntity) => {
+      if (!user) {
+        throw new UserNotFoundException();
+      }
+      return user;
+    })
   }
 }

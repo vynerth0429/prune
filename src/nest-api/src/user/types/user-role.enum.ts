@@ -3,7 +3,3 @@ export enum UserRoleEnum {
   ORGANIZER = 'organizer',
   USER = 'user'
 }
-
-export enum UserRoleMetadataEnum {
-  USER_ROLE = 'user-role',
-}

@@ -1,19 +1,31 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import {
-  UserRoleEnum,
   UserRoleMetadataEnum,
-} from './../models/user-roles.enum';
+} from '../models/metadata.enum';
+import {
+  InsufficientPermissionException,
+} from '../exceptions/exception-thrower';
 
 import {
   UserEntity,
 } from './../../user/entities/user.entity';
+import {
+  UserRoleEnum,
+} from './../../user/types/user-role.enum';
+import {
+  UserService,
+} from './../../user/service/user.service';
 
 @Injectable()
 export class UserRolesGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private userService: UserService,
+  ) {}
 
   canActivate(
     context: ExecutionContext,
@@ -27,8 +39,16 @@ export class UserRolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user: UserEntity = request.user;
 
-    console.log('user', user);
-
-    return true;
+    return this.userService
+      .findById(user.userId)
+      .pipe(
+        map((userEntity: UserEntity) => {
+          if (roles.indexOf(userEntity.role) > -1) {
+            return true;
+          } else {
+            throw new InsufficientPermissionException();
+          }
+        })
+      );
   }
 }

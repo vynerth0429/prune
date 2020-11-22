@@ -36,9 +36,6 @@ import {
   DeleteResultDTO,
 } from './../../common/dto/operation-result.dto';
 import {
-  UserRoleEnum,
-} from "./../../common/models/user-roles.enum";
-import {
   UserRolesGuard,
 } from './../../common/guards/user-roles.guard';
 import {
@@ -47,7 +44,10 @@ import {
 
 import {
   UserEntity,
-} from '../entities/user.entity';
+} from './../entities/user.entity';
+import {
+  UserRoleEnum,
+} from './../types/user-role.enum';
 
 import {
   CreateUserDTO,
@@ -146,7 +146,7 @@ export class UserController {
     @Param('userId', ParseUUIDPipe)
     userId: string
   ) {
-    return this.userService.findById(userId);
+    return this.userService.findOne(userId);
   }
 
 
@@ -243,6 +243,8 @@ export class UserController {
       description: 'Error: Bad Request'
     }
   )
+  @UserRoles(UserRoleEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, UserRolesGuard)
   delete(
     @Param('userId', ParseUUIDPipe)
     userId: string

@@ -1,9 +1,9 @@
+import { UserRoleEnum } from './../types/user-role.enum';
 import {
   Entity,
-  PrimaryColumn,
   Column,
-  Generated,
   BeforeInsert,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import {
   Exclude,
@@ -26,10 +26,7 @@ export class UserEntity extends BaseEntity {
     example: "0bd4e4c5-5d7e-4ed5-8764-3d784c1e5abd",
     description: "Unique valid uuid value"
   })
-  @PrimaryColumn({
-    update: false
-  })
-  @Generated("uuid")
+  @PrimaryGeneratedColumn('uuid')
   userId: string;
 
   @ApiProperty({
@@ -74,6 +71,19 @@ export class UserEntity extends BaseEntity {
     default: false,
   })
   isVerified:	boolean;
+
+  @ApiProperty({
+    example: UserRoleEnum.USER,
+    description: "User role",
+    type: 'enum',
+    enum: UserRoleEnum,
+  })
+  @Column({
+    type: 'enum',
+    enum: UserRoleEnum,
+    default: UserRoleEnum.USER,
+  })
+  role: UserRoleEnum;
 
   @BeforeInsert()
   emailToLowerCase() {

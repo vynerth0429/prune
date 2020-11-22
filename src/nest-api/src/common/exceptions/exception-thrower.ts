@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   ConflictException,
   BadRequestException,
+  ForbiddenException,
 } from "@nestjs/common";
 
 import {
@@ -44,6 +45,12 @@ export class ValidationFailedException extends BadRequestException {
 
 export class EmptyOrInvalidTokenException extends UnauthorizedException {
   constructor() {
-    super(generateErrorContent('A_0002'));
+    super(generateErrorContent('A_0001'));
+  }
+}
+
+export class InsufficientPermissionException extends ForbiddenException {
+  constructor() {
+    super(generateErrorContent('A_0003'));
   }
 }

@@ -1,4 +1,5 @@
 import {
+  BeforeUpdate,
   Column,
   CreateDateColumn,
 } from "typeorm";
@@ -22,4 +23,9 @@ export abstract class BaseEntity {
     nullable: true,
   })
   modifiedOn: Date;
+
+  @BeforeUpdate()
+  updateModifiedOn() {
+    this.modifiedOn = new Date();
+  }
 }

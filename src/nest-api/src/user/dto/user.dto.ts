@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsString,
   MinLength,
+  Allow,
 } from 'class-validator';
 
 import {
@@ -48,18 +49,16 @@ export class CreateUserDTO {
 export class UpdateUserDTO {
   @ApiProperty({
     example: "Jake",
-    description: "First name"
+    description: "First name",
   })
-  @IsNotEmpty()
-  @IsString()
+  @Allow()
   firstName: string;
 
   @ApiProperty({
     example: "Weary",
     description: "Last name"
   })
-  @IsNotEmpty()
-  @IsString()
+  @Allow()
   lastName:	string;
 }
 

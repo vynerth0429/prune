@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   ConflictException,
   BadRequestException,
+  ForbiddenException,
 } from "@nestjs/common";
 
 import {
@@ -32,12 +33,24 @@ export class InvalidCredentialException extends UnauthorizedException {
 
 export class EmailAlreadyExistsException extends ConflictException {
   constructor() {
-    super(generateErrorContent('A_0001'));
+    super(generateErrorContent('A_0002'));
   }
 }
 
 export class ValidationFailedException extends BadRequestException {
   constructor() {
     super("string | string[]");
+  }
+}
+
+export class EmptyOrInvalidTokenException extends UnauthorizedException {
+  constructor() {
+    super(generateErrorContent('A_0001'));
+  }
+}
+
+export class InsufficientPermissionException extends ForbiddenException {
+  constructor() {
+    super(generateErrorContent('A_0003'));
   }
 }

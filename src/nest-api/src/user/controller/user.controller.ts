@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -26,16 +27,27 @@ import {
   InvalidCredentialException,
   EmailAlreadyExistsException,
   ValidationFailedException,
-} from "src/common/exceptions/exception-thrower";
-
+} from "./../../common/exceptions/exception-thrower";
+import {
+  UserRoles,
+} from './../../common/decorators/user-roles.decorator';
 import {
   UpdateResultDTO,
   DeleteResultDTO,
 } from './../../common/dto/operation-result.dto';
+import {
+  UserRolesGuard,
+} from './../../common/guards/user-roles.guard';
+import {
+  JwtAuthGuard,
+} from './../../auth/guards/jwt-auth.guard';
 
 import {
   UserEntity,
-} from '../entities/user.entity';
+} from './../entities/user.entity';
+import {
+  UserRoleEnum,
+} from './../types/user-role.enum';
 
 import {
   CreateUserDTO,
@@ -134,7 +146,7 @@ export class UserController {
     @Param('userId', ParseUUIDPipe)
     userId: string
   ) {
-    return this.userService.findById(userId);
+    return this.userService.findOne(userId);
   }
 
 
@@ -166,6 +178,8 @@ export class UserController {
   @UsePipes(new ValidationPipe({
     skipMissingProperties: true,
   }))
+  @UserRoles(UserRoleEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, UserRolesGuard)
   update(
     @Param('userId', ParseUUIDPipe)
     userId: string,
@@ -229,6 +243,8 @@ export class UserController {
       description: 'Error: Bad Request'
     }
   )
+  @UserRoles(UserRoleEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, UserRolesGuard)
   delete(
     @Param('userId', ParseUUIDPipe)
     userId: string

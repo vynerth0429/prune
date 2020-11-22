@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -26,12 +27,23 @@ import {
   InvalidCredentialException,
   EmailAlreadyExistsException,
   ValidationFailedException,
-} from "src/common/exceptions/exception-thrower";
-
+} from "./../../common/exceptions/exception-thrower";
+import {
+  UserRoles,
+} from './../../common/decorators/user-roles.decorator';
 import {
   UpdateResultDTO,
   DeleteResultDTO,
 } from './../../common/dto/operation-result.dto';
+import {
+  UserRoleEnum,
+} from "./../../common/models/user-roles.enum";
+import {
+  UserRolesGuard,
+} from './../../common/guards/user-roles.guard';
+import {
+  JwtAuthGuard,
+} from './../../auth/guards/jwt-auth.guard';
 
 import {
   UserEntity,
@@ -166,6 +178,8 @@ export class UserController {
   @UsePipes(new ValidationPipe({
     skipMissingProperties: true,
   }))
+  @UserRoles(UserRoleEnum.ADMIN)
+  @UseGuards(JwtAuthGuard, UserRolesGuard)
   update(
     @Param('userId', ParseUUIDPipe)
     userId: string,

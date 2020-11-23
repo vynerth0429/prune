@@ -37,7 +37,7 @@ import {
 } from './../../common/dto/operation-result.dto';
 import {
   UserRolesGuard,
-} from './../../common/guards/user-roles.guard';
+} from '../../auth/guards/user-roles.guard';
 import {
   JwtAuthGuard,
 } from './../../auth/guards/jwt-auth.guard';

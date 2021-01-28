@@ -5,20 +5,20 @@ import { map } from 'rxjs/operators';
 
 import {
   UserRoleMetadataEnum,
-} from '../models/metadata.enum';
+} from '../../common/models/metadata.enum';
 import {
   InsufficientPermissionException,
-} from '../exceptions/exception-thrower';
+} from '../../common/exceptions/exception-thrower';
 
 import {
   UserEntity,
-} from './../../user/entities/user.entity';
+} from '../../user/entities/user.entity';
 import {
   UserRoleEnum,
-} from './../../user/types/user-role.enum';
+} from '../../user/types/user-role.enum';
 import {
   UserService,
-} from './../../user/service/user.service';
+} from '../../user/service/user.service';
 
 @Injectable()
 export class UserRolesGuard implements CanActivate {

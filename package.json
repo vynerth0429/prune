@@ -1,8 +1,8 @@
 {
   "name": "prune",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "0.0.2",
+  "description": "A boilerplate project for Nestjs with TypeOrm, Postgres DB and Swagger",
+  "author": "JUn Rey Ellezo",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
